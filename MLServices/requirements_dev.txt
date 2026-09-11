@@ -1,0 +1,16 @@
+Flask
+Flask-Cors
+python-dotenv
+
+# API DOCUMENTATION
+flasgger
+
+#FRUITS & VEG IDENTIFY
+numpy
+pandas
+matplotlib
+tensorflow
+scikit-learn
+torch
+torchvision
+datasets[vision]

@@ -1,0 +1,35 @@
+.main-container {
+  margin: 5px;
+  border: 2px solid red;
+  width: 550px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+.top-container-logo {
+  width: 100%;
+  height: 200px;
+  border: 2px solid blue;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.top-container-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.top-container-text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}

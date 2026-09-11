@@ -1,0 +1,109 @@
+# ==========================================
+# Machine Learning & Data Science Specifics
+# ==========================================
+
+# Data storage (Never commit raw datasets)
+# Data storage (Never commit raw datasets)
+data/fruits_veg_data/
+*.csv
+*.parquet
+*.jsonl
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pkl
+*.pickle
+
+# Model checkpoints and weights
+ML_models/fruit_veg_vgg16_model.keras
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.pb
+*.tflite
+weights/
+
+# Experiment tracking & logs
+lightning_logs/
+wandb/
+.comet/
+mlruns/
+tensorboard/
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# GPU / CUDA artifacts
+.nv/
+
+# ==========================================
+# Standard Python Artifacts
+# ==========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ==========================================
+# Environments & Dependencies
+# ==========================================
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Poetry / Pipenv / uv (uncomment if you want to ignore lockfiles, though usually committed)
+# Pipfile.lock
+# poetry.lock
+# uv.lock
+
+# ==========================================
+# IDEs and OS Artifacts
+# ==========================================
+
+# VS Code & PyCharm
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Operating System
+.DS_Store
+Thumbs.db
+
+# Private environment variables (API keys, credentials)
+.env
+.env.*

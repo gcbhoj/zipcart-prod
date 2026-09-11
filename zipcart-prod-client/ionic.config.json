@@ -1,0 +1,7 @@
+{
+  "name": "zipcart-prod-client",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

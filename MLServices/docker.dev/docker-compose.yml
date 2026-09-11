@@ -1,0 +1,74 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker.dev/Dockerfile
+
+    env_file:
+      - ../.env
+
+    container_name: python-services
+
+    ports:
+      - "5100:5100"
+
+    volumes:
+      # Application source code
+      - ../:/app
+
+      # Large datasets - mounted, NOT copied
+      # - ../data/fruits_data:/app/fruits_data
+      # - ../trialImages:/app/trialImages
+
+      # Trained models
+      - ../ML_models:/app/ML_models
+
+    restart: unless-stopped
+
+    networks:
+      - zip-cart
+
+  notebook:
+    build:
+      context: ..
+      dockerfile: docker.dev/Dockerfile
+
+    env_file:
+      - ../.env
+
+    container_name: ml_notebook
+
+    ports:
+      - "8888:8888"
+
+    volumes:
+      # Application source code
+      - ../:/app
+
+      # Large datasets - mounted, NOT copied
+      # - ../data/fruits_data:/app/fruits_data
+
+      # Models
+      - ../ML_models:/app/ML_models
+
+
+    working_dir: /app/jupyter_notebook
+
+    command: >
+      jupyter notebook
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --allow-root
+      --NotebookApp.token=my-token
+
+    restart: unless-stopped
+
+    networks:
+      - zip-cart
+
+volumes:
+  hf_cache:
+
+networks:
+  zip-cart:

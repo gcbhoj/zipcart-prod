@@ -1,0 +1,92 @@
+Predict Fruit & Vegetables
+---
+tags:
+  - Predict Fruit & Vegetables
+
+summary: Upload a JPG image of a fruit or vegetable for prediction
+
+description: >
+  Uploads a JPG image of a fruit or vegetable.
+  The uploaded image is temporarily saved with a unique filename
+  for subsequent fruit and vegetable prediction processing.
+
+consumes:
+  - multipart/form-data
+
+produces:
+  - application/json
+
+parameters:
+  - name: file
+    in: formData
+    required: true
+    type: file
+    description: >
+      JPG image of a fruit or vegetable.
+      Only .jpg files are supported.
+
+responses:
+  200:
+    description: Fruit-n-Veg Identified Successfully
+
+    schema:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: true
+
+        message:
+          type: object
+
+          properties:
+            predictions:
+              type: array
+
+              items:
+                type: object
+
+                properties:
+                  prediction:
+                    type: string
+                    example: "Cabbage"
+
+                  accuracy:
+                    type: number
+                    format: float
+                    example: 0.94
+
+                  image:
+                    type: string
+                    example: "/images/cabbage.jpg"
+
+  400:
+    description: Invalid file upload or unsupported file format
+
+    schema:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: "Expected JPG format file. Received another file type."
+
+  500:
+    description: Internal server error while saving the uploaded image
+
+    schema:
+      type: object
+
+      properties:
+        success:
+          type: boolean
+          example: false
+
+        message:
+          type: string
+          example: "Failed to save uploaded image."

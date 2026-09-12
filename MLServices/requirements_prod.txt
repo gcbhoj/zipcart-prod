@@ -2,3 +2,14 @@ Flask
 Flask-Cors
 gunicorn
 python-dotenv
+
+flasgger
+
+numpy
+pandas
+matplotlib
+tensorflow
+scikit-learn
+torch
+torchvision
+datasets[vision]

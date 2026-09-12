@@ -7,29 +7,34 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 
 
-BASE_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "data")
-)
+# BASE_PATH = os.path.abspath(
+#     os.path.join(os.path.dirname(__file__), "..")
+# )
 
-DATA_DIR = os.path.join(
-    BASE_PATH,
-    "image_uploads"
-)
+# DATA_DIR = os.path.join(
+#     BASE_PATH,"data",
+#     "image_uploads"
+# )
 
-ML_DIR = os.path.join(
-    BASE_PATH,
-    "ML_models"
-)
+# ML_DIR = os.path.join(BASE_PATH,"ML_models")
+    
+# MODEL_PATH = os.path.join(
+#     ML_DIR,
+#     "tlfinal.h5"
+# )
 
-MODEL_PATH = os.path.join(
-    ML_DIR,
-    "tlfinal.h5"
-)
+# CLASS_NAMES_PATH = os.path.join(
+#     ML_DIR,
+#     "class_names.json"
+# )
+BASE_PATH = "/app"
 
-CLASS_NAMES_PATH = os.path.join(
-    ML_DIR,
-    "class_names.json"
-)
+DATA_DIR = "/app/data/image_uploads"
+
+    
+MODEL_PATH = "/app/ML_models/tlfinal.h5"
+
+CLASS_NAMES_PATH = "/app/ML_models/class_names.json"
 
 logger = logging.getLogger("flask_app")
 
@@ -138,14 +143,12 @@ class PredictFruitNVeg:
                 float(predictions[best_index]) * 100
             )
 
-            result = {
+            return {
                 "success": True,
                 "message": {
                     "predictions": prediction_results
                 }
             }
-
-            return result
 
         except Exception as error:
 
@@ -158,6 +161,13 @@ class PredictFruitNVeg:
                 "success": False,
                 "message": str(error)
             }
+
+        finally:
+            logger.info("Deletion started for image: %s", self.file_name)
+
+            self._remove_image(self.file_path)
+            logger.info("Deletion completed for image: %s", self.file_name)
+
 
 
     def _load_model(self):
@@ -253,3 +263,62 @@ class PredictFruitNVeg:
         )
 
         return img_batch
+    
+    def _remove_image(self, image_path):
+
+        logger.info(
+            "Attempting to remove image: %s",
+            image_path
+        )
+
+        if not image_path:
+            logger.warning(
+                "Image path was not provided for deletion."
+            )
+            return False
+
+        absolute_path = os.path.abspath(image_path)
+
+        logger.info(
+            "Absolute image path: %s",
+            absolute_path
+        )
+
+        logger.info(
+            "Image exists before deletion: %s",
+            os.path.isfile(absolute_path)
+        )
+
+        if not os.path.isfile(absolute_path):
+
+            logger.warning(
+                "Image does not exist and cannot be deleted: %s",
+                absolute_path
+            )
+
+            return False
+
+        try:
+
+            os.remove(absolute_path)
+
+            logger.info(
+                "Image removed successfully: %s",
+                absolute_path
+            )
+
+            logger.info(
+                "Image exists after deletion: %s",
+                os.path.isfile(absolute_path)
+            )
+
+            return True
+
+        except OSError as error:
+
+            logger.exception(
+                "Failed to remove image: %s",
+                absolute_path
+            )
+
+            return False

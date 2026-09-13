@@ -5,6 +5,7 @@
 # Data storage (Never commit raw datasets)
 # Data storage (Never commit raw datasets)
 data/fruits_veg_data/
+data/fruits_data/
 *.csv
 *.parquet
 *.jsonl

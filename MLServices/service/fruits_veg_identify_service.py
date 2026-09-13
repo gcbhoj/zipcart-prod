@@ -5,31 +5,20 @@ import json
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
+from HF_config import hf_config
+from urllib.parse import quote
+from huggingface_hub import HfFileSystem
 
 
-BASE_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "data")
-)
 
-DATA_DIR = os.path.join(
-    BASE_PATH,
-    "image_uploads"
-)
+BASE_PATH = "/app"
 
-ML_DIR = os.path.join(
-    BASE_PATH,
-    "ML_models"
-)
+DATA_DIR = "/app/data/image_uploads"
 
-MODEL_PATH = os.path.join(
-    ML_DIR,
-    "tlfinal.h5"
-)
+    
+MODEL_PATH = "/app/ML_models/tlfinal.h5"
 
-CLASS_NAMES_PATH = os.path.join(
-    ML_DIR,
-    "class_names.json"
-)
+CLASS_NAMES_PATH = "/app/ML_models/class_names.json"
 
 logger = logging.getLogger("flask_app")
 
@@ -120,12 +109,31 @@ class PredictFruitNVeg:
             prediction_results = []
 
             for index in top_indices:
+                
+
+                logger.info(
+                        "Prediction index: %s",
+                        index
+                    )
+
+                logger.info(
+                        "Class name from class_names[%s]: %r",
+                        index,
+                        self.class_names[index]
+                    )
+
+
+                
+                class_name = self.class_names[index]
 
                 prediction_results.append({
-                    "class": self.class_names[index],
+                    "class": class_name,
                     "confidence": round(
                         float(predictions[index]) * 100,
                         2
+                    ),
+                    "image": self._get_image_link(
+                        class_name
                     )
                 })
 
@@ -138,14 +146,12 @@ class PredictFruitNVeg:
                 float(predictions[best_index]) * 100
             )
 
-            result = {
+            return {
                 "success": True,
                 "message": {
                     "predictions": prediction_results
                 }
             }
-
-            return result
 
         except Exception as error:
 
@@ -159,13 +165,17 @@ class PredictFruitNVeg:
                 "message": str(error)
             }
 
+        finally:
+            logger.info("Deletion started for image: %s", self.file_name)
+
+            self._remove_image(self.file_path)
+            logger.info("Deletion completed for image: %s", self.file_name)
+
+
 
     def _load_model(self):
 
-        logger.info(
-            "Loading fruit and vegetable ML model: %s",
-            MODEL_PATH
-        )
+        logger.info("Loading fruit and vegetable ML model: %s",MODEL_PATH)
 
         if not os.path.isfile(MODEL_PATH):
 
@@ -253,3 +263,217 @@ class PredictFruitNVeg:
         )
 
         return img_batch
+    
+    def _remove_image(self, image_path):
+
+        logger.info(
+            "Attempting to remove image: %s",
+            image_path
+        )
+
+        if not image_path:
+            logger.warning(
+                "Image path was not provided for deletion."
+            )
+            return False
+
+        absolute_path = os.path.abspath(image_path)
+
+        logger.info(
+            "Absolute image path: %s",
+            absolute_path
+        )
+
+        logger.info(
+            "Image exists before deletion: %s",
+            os.path.isfile(absolute_path)
+        )
+
+        if not os.path.isfile(absolute_path):
+
+            logger.warning(
+                "Image does not exist and cannot be deleted: %s",
+                absolute_path
+            )
+
+            return False
+
+        try:
+
+            os.remove(absolute_path)
+
+            logger.info(
+                "Image removed successfully: %s",
+                absolute_path
+            )
+
+            logger.info(
+                "Image exists after deletion: %s",
+                os.path.isfile(absolute_path)
+            )
+
+            return True
+
+        except OSError as error:
+
+            logger.exception(
+                "Failed to remove image: %s",
+                absolute_path
+            )
+
+            return False
+        
+    from urllib.parse import quote
+
+
+    def _get_image_link(self, class_name):
+
+        if not class_name:
+            logger.warning(
+                "Class name was not provided for image lookup."
+            )
+            return None
+
+        try:
+
+            fs = HfFileSystem(
+                token=hf_config.HF_TOKEN
+            )
+
+            class_path = (
+                f"{hf_config.BUCKET_URI}/"
+                f"fruits_veg_data/"
+                f"Test/"
+                f"{class_name}"
+            )
+
+            logger.info(
+                "Searching class folder: %s",
+                class_path
+            )
+
+            files = fs.glob(
+                f"{class_path}/*"
+            )
+
+            if not files:
+
+                logger.warning(
+                    "No files found for class: %r",
+                    class_name
+                )
+
+                return None
+
+            image_extensions = (
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".webp"
+            )
+
+            image_path = next(
+                (
+                    file_path
+                    for file_path in files
+                    if file_path.lower().endswith(image_extensions)
+                ),
+                None
+            )
+
+            if not image_path:
+
+                logger.warning(
+                    "No image files found for class: %r",
+                    class_name
+                )
+
+                return None
+
+            logger.info(
+                "Selected image path from HF: %s",
+                image_path
+            )
+
+            # ------------------------------------------------
+            # Normalize the HF path
+            # ------------------------------------------------
+            #
+            # Possible value:
+            #
+            # hf://buckets/BhojGC/zipcart/fruits_veg_data/Test/...
+            #
+            # or:
+            #
+            # buckets/BhojGC/zipcart/fruits_veg_data/Test/...
+            #
+            # We only need:
+            #
+            # fruits_veg_data/Test/...
+            # ------------------------------------------------
+
+            marker = "zipcart/"
+
+            if marker not in image_path:
+
+                logger.error(
+                    "Unexpected HF image path format: %s",
+                    image_path
+                )
+
+                return None
+
+            relative_path = image_path.split(
+                marker,
+                1
+            )[1]
+
+            # URL encode each path component
+            encoded_path = "/".join(
+                quote(
+                    part,
+                    safe=""
+                )
+                for part in relative_path.split("/")
+            )
+
+            image_url = (
+                f"{hf_config.BASE_BUCKET}"
+                f"/resolve/"
+                f"{encoded_path}"
+            )
+
+            logger.info(
+                "Class: %r",
+                class_name
+            )
+
+            logger.info(
+                "Relative path: %s",
+                relative_path
+            )
+
+            logger.info(
+                "Encoded path: %s",
+                encoded_path
+            )
+
+            logger.info(
+                "Generated image URL: %s",
+                image_url
+            )
+
+            return image_url
+
+        except Exception:
+
+            logger.exception(
+                "Failed to generate image URL for class: %s",
+                class_name
+            )
+
+            return None
+
+
+
+

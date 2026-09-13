@@ -1,4 +1,3 @@
-from config.load_project_description import load_swagger_description
 SWAGGER_CONFIG = {
     "headers": [],
     "specs": [
@@ -18,7 +17,7 @@ SWAGGER_TEMPLATE = {
     "swagger": "2.0",
     "info": {
         "title": "ZipCart ML Services",
-        "description": load_swagger_description(),
+        "description": "ZipCart-ML Services",
         "version": "1.0.0"
     }
 }

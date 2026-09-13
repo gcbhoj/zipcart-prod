@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 from service.fruits_veg_identify_service import PredictFruitNVeg
 
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg"}
+ALLOWED_EXTENSIONS = {".jpg", ".jpeg",".png"}
 
 BASE_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "data")

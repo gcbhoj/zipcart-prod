@@ -151,5 +151,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=PORT,
         debug=DEBUG,
-        use_reloader=False,
+        use_reloader=True,
     )

@@ -23,7 +23,8 @@ COPY requirements_dev.txt .
 # Install Python dependencies
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install notebook ipykernel
-RUN pip install --no-cache-dir -r requirements_dev.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --no-cache-dir -r requirements_dev.txt
 RUN pip install --no-cache-dir -U huggingface_hub
 # Copy your app code
 COPY . /app

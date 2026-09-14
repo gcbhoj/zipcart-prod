@@ -75,29 +75,6 @@ DEBUG = True
 
 BASE_URL = "/api/v1/MLservices"
 
-# ============================================================
-# DEVELOPMENT INITIALIZATION
-# ============================================================
-# def sync_image_dataset():
-#     logger.info(
-#         "Starting image dataset sync..."
-#     )
-
-#     initializer = ImageDataSetLoader()
-#     dataset = initializer.init_data_set()
-
-#     logger.info(
-#         "Dataset sync successful"
-#     )
-
-# APP_ENV = os.getenv("APP_ENV", "development")
-
-# if APP_ENV == "development":
-#     logger.info("Running development startup...")
-#     sync_image_dataset()
-# else:
-#     logger.info("Production mode detected. Skipping dataset download.")
-
 
 # ============================================================
 # ROUTES

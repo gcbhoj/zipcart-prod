@@ -1,0 +1,66 @@
+{
+  "prerequisites": [
+    "Python 3.11 or higher installed",
+    "Docker installed and configured",
+    "Docker Compose installed",
+    "Git installed",
+    "Project cloned from the GitHub repository",
+    "Project opened in Visual Studio Code"
+  ],
+  "note": [
+    "If you are a developer and intend to make changes to the application, run the application in development mode.",
+    "If you are a developer or user and only intend to use the application, run the application in production mode."
+  ],
+  "production-mode": {
+    "steps": {
+      "step 1": {
+        "description": "Open a new terminal in Visual Studio Code and navigate to the MLServices project directory.",
+        "command": "cd MLServices"
+      },
+      "step 2": {
+        "description": "Build the production Docker images without using the Docker build cache.",
+        "command": "docker compose build --no-cache"
+      },
+      "step 3": {
+        "description": "Start the application in production mode.",
+        "command": "docker compose up"
+      },
+      "step 4": {
+        "description": "Verify that the application is running by opening the API documentation in a web browser.",
+        "url": "http://localhost:5100/api-docs"
+      },
+      "step 5": {
+        "description": "Stop the running ML services container.",
+        "command": "docker compose down"
+      }
+    }
+  },
+  "development-mode": {
+    "steps": {
+      "step 1": {
+        "description": "Open a new terminal in Visual Studio Code and navigate to the development Docker Compose directory.",
+        "command": "cd MLServices/docker.dev"
+      },
+      "step 2": {
+        "description": "Build the development Docker images without using the Docker build cache.",
+        "command": "docker compose build --no-cache"
+      },
+      "step 3": {
+        "description": "Start the application in development mode.",
+        "command": "docker compose up"
+      },
+      "step 4": {
+        "description": "Verify that the application is running by opening the API documentation in a web browser.",
+        "url": "http://localhost:5100/api-docs"
+      },
+      "step 5": {
+        "description": "Run the automated tests inside the development container.",
+        "command": "docker exec -it <development-container-name> pytest"
+      },
+      "step 6": {
+        "description": "Stop the running development container.",
+        "command": "docker compose down"
+      }
+    }
+  }
+}

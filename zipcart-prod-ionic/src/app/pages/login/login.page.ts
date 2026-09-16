@@ -1,11 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonItem,
+  IonButton,
+  IonInputPasswordToggle,
+  IonInput,
+} from '@ionic/angular';
 import { SignUpCredentials } from '../../DTOs/signUpCredentials';
 import { validateEmail, validatePassword } from '../signup/verificationManager';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-login',
@@ -18,6 +26,10 @@ import { Router } from '@angular/router';
     IonToolbar,
     CommonModule,
     FormsModule,
+    IonItem,
+    IonButton,
+    IonInputPasswordToggle,
+    IonInput,
   ],
 })
 export class LoginPage implements OnInit {
@@ -25,6 +37,8 @@ export class LoginPage implements OnInit {
     emailAddress: '',
     password: '',
   };
+  emailErrorText: string = 'this is error text';
+  passwordErrorText: string = '';
   private router = inject(Router);
 
   ngOnInit() {

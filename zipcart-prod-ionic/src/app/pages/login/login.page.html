@@ -1,13 +1,59 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>login</ion-title>
+    <ion-title>Log In</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">login</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="main-container">
+    <div class="top-container">
+      <div class="top-container-logo">
+        <img src="assets/ZipCartLogo.jpg" alt="zipcart logo" />
+      </div>
+      <div class="top-container-text">
+        <h3>Welcome Back</h3>
+        <h5>Log In using your account credentials</h5>
+      </div>
+      <div class="form-container">
+        <ion-item class="input-containers">
+          <ion-input
+            label="Email Address"
+            labelPlacement="floating"
+            placeholder="Enter Email Address"
+            [errorText]="emailErrorText"
+            [(ngModel)]="userInput.emailAddress"
+            [class.ion-invalid]="emailErrorText"
+            [class.ion-touched]="emailErrorText"
+          ></ion-input>
+        </ion-item>
+        <ion-item class="input-containers">
+          <ion-input
+            type="password"
+            label="Password"
+            labelPlacement="floating"
+            placeholder="Enter Preferred Password"
+            helperText="Password must contain:
+8–20 characters.
+At least one uppercase letter.
+At least one lowercase letter.
+At least one number.
+At least one special character."
+            [counter]="true"
+            maxlength="20"
+            minlength="8"
+            [errorText]="passwordErrorText"
+            [(ngModel)]="userInput.password"
+            [class.ion-invalid]="passwordErrorText"
+            [class.ion-touched]="passwordErrorText"
+            [class.password-valid]="userInput.password.length >= 8"
+          >
+            <ion-button fill="clear" slot="end" aria-label="Show/hide">
+              <ion-input-password-toggle
+                slot="end"
+              ></ion-input-password-toggle></ion-button
+          ></ion-input>
+        </ion-item>
+      </div>
+    </div>
+  </div>
 </ion-content>

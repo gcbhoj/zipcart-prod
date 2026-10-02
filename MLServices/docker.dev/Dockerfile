@@ -25,12 +25,11 @@ RUN pip install --upgrade pip setuptools wheel
 RUN pip install notebook ipykernel
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --no-cache-dir -r requirements_dev.txt
-RUN pip install --no-cache-dir -U huggingface_hub
 # Copy your app code
 COPY . /app
 
 # Make sure MLModels folder is included
-# COPY data/fruits_data /app/fruits_data
+COPY data/Fruits_data /app/Fruits_data
 COPY ML_models /app/ML_models
 
 # If you need test images, copy them too

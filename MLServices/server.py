@@ -2,7 +2,7 @@ import os
 import uuid
 import threading
 
-from flask import Flask, g, request
+from flask import Flask, g, request, send_from_directory
 from flask_cors import CORS
 from flasgger import Swagger
 
@@ -16,6 +16,9 @@ from middleware.exception_handler import register_error_handlers
 from routes.fruits_veg_identify_routes import fruits_veg_identify_bp
 
 app = Flask(__name__)
+
+
+FRUIT_IMAGE_DIRECTORY = "/app/data/Fruits_data/test"
 
 
 # ============================================================

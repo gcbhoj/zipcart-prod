@@ -5,7 +5,7 @@
 # Data storage (Never commit raw datasets)
 # Data storage (Never commit raw datasets)
 data/fruits_veg_data/
-data/fruits_data/
+data/Fruits_data/
 *.csv
 *.parquet
 *.jsonl
@@ -18,6 +18,8 @@ data/fruits_data/
 
 # Model checkpoints and weights
 ML_models/fruit_veg_vgg16_model.keras
+ML_models/fruits_veg_identify.keras
+ML_models/fruits_veg_identify_v2.keras
 checkpoints/
 *.pt
 *.pth
